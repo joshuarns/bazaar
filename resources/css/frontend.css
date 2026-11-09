@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Libre+Bodoni:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+    --bg: #f9f7f5;
+    --fg: #1d1d1b;
+    --accent: #eb4b5d;
+    --muted: #667085;
+}
+
+body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.font-serif {
+    font-family: 'Libre Bodoni', 'Lora', Georgia, serif;
+}
+
+.prose {
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.8;
+}
+
+.prose p { margin-bottom: 1.5em; }
+.prose h2 { font-family: 'Libre Bodoni', serif; font-size: 1.5rem; margin: 2em 0 0.75em; }
