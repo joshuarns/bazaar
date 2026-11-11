@@ -1,49 +1,49 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SocialLinks } from './Icons';
 
 const LINKS = [
-    { label: 'MODA', slug: 'mode' },
-    { label: 'BELLEZA', slug: 'beaute' },
-    { label: 'CULTURA', slug: 'culture' },
-    { label: 'ESTILO DE VIDA', slug: 'lifestyle' },
-    { label: 'RELOJERÍA & JOYERÍA', slug: 'horlogerie-joaillerie' },
-    { label: 'BAZAAR HOMBRE', slug: 'bazaar-homme' },
+    'Aviso legal',
+    'Condiciones generales de uso',
+    'Gestionar las cookies',
+    'Suscribirse',
+    'Equipo editorial',
+    'Todos nuestros autores',
+    'Ayuda y contacto',
 ];
 
 export default function Footer() {
     return (
-        <footer className="bg-[#1d1d1b] text-white/60 mt-4">
-            <div className="max-w-screen-xl mx-auto px-6 py-12">
-                <div className="text-center mb-8">
-                    <span className="font-['Libre_Bodoni',serif] text-[32px] tracking-[0.25em] text-white font-normal select-none">
-                        BAZAAR
-                    </span>
+        <footer className="hb-footer">
+            <div className="hb-footer-content">
+                <div className="hb-footer-brand">
+                    <Link to="/" title="Ir al inicio">
+                        <img src="/images/logo-white.png" alt="Bazaar" className="hb-footer-logo" />
+                    </Link>
                 </div>
 
-                <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2 mb-10">
-                    {LINKS.map(({ label, slug }) => (
-                        <li key={slug}>
-                            <Link
-                                to={`/${slug}`}
-                                className="font-['Lora',serif] text-[11px] font-semibold tracking-[0.15em] uppercase text-white/50 hover:text-white transition-colors"
-                            >
-                                {label}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
+                <nav className="hb-footer-links" aria-label="Enlaces del pie de página">
+                    <ul>
+                        {LINKS.map(label => (
+                            <li key={label}><a href="#" className="hb-link">{label}</a></li>
+                        ))}
+                    </ul>
+                </nav>
 
-                <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 mb-6">
-                    {['Aviso legal', 'Términos de uso', 'Política de privacidad', 'Gestión de cookies'].map(item => (
-                        <a key={item} href="#" className="font-['Lora',serif] text-[10px] text-white/30 hover:text-white/60 transition-colors">
-                            {item}
-                        </a>
-                    ))}
+                <div className="hb-footer-socials">
+                    <h2 className="hb-footer-socials-title">Seguir a Bazaar</h2>
+                    <div className="hb-footer-socials-links"><SocialLinks /></div>
                 </div>
 
-                <p className="text-center font-['Lora',serif] text-[10px] text-white/20">
-                    © {new Date().getFullYear()} Harper's Bazaar España. Todos los derechos reservados.
-                </p>
+                <div className="hb-footer-separator" />
+
+                <div className="hb-footer-legals">
+                    © {new Date().getFullYear()} Bazaar, todos los derechos reservados. <a href="#" className="hb-link">Aviso legal</a>
+                </div>
+
+                <div className="hb-footer-mention">
+                    Proyecto de demostración. Contenido y fotografías de ejemplo.
+                </div>
             </div>
         </footer>
     );

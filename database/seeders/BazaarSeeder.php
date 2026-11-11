@@ -16,6 +16,7 @@ class BazaarSeeder extends Seeder
             ['name' => 'BELLEZA',         'slug' => 'beaute'],
             ['name' => 'CULTURA',         'slug' => 'culture'],
             ['name' => 'ESTILO DE VIDA',  'slug' => 'lifestyle'],
+            ['name' => 'BAZAAR HOMBRE',   'slug' => 'bazaar-homme'],
         ];
 
         foreach ($categories as $cat) {
@@ -199,6 +200,31 @@ class BazaarSeeder extends Seeder
                 'excerpt'  => 'Los álbumes más bellos para regalar o coleccionar esta temporada.',
                 'image'    => null,
             ],
+            // BAZAAR HOMBRE (bloque "Dossiers" del home)
+            [
+                'category' => 'bazaar-homme',
+                'title'    => 'Bazaar Hombre: la nueva masculinidad se viste de matices',
+                'excerpt'  => 'Un número dedicado a quienes reinventan el guardarropa masculino.',
+                'image'    => null,
+            ],
+            [
+                'category' => 'bazaar-homme',
+                'title'    => 'El regreso del traje sastre, ahora más relajado que nunca',
+                'excerpt'  => 'Hombros suaves, pantalones amplios y tejidos nobles.',
+                'image'    => null,
+            ],
+            [
+                'category' => 'bazaar-homme',
+                'title'    => 'Cinco actores que están redefiniendo la alfombra roja',
+                'excerpt'  => 'Joyas, transparencias y color: el estilo masculino se atreve.',
+                'image'    => null,
+            ],
+            [
+                'category' => 'bazaar-homme',
+                'title'    => 'Relojes de vestir: las piezas clásicas que vuelven a la muñeca',
+                'excerpt'  => 'Esferas finas y correas de piel para un invierno elegante.',
+                'image'    => null,
+            ],
         ];
 
         foreach ($articles as $data) {
@@ -208,10 +234,14 @@ class BazaarSeeder extends Seeder
             $title = $data['title'];
             $slug  = Str::slug($title) ?: Str::random(10);
 
-            $imageValue = null;
+            // Sin imagen propia → foto libre de Lorem Picsum, estable por slug
+            $imageValue = "https://picsum.photos/seed/" . Str::limit($slug, 40, '') . "/1200/800";
             if (!empty($data['image']) && str_starts_with($data['image'], 'http')) {
                 $imageValue = $data['image'];
             }
+
+            // Rellena la imagen de artículos ya sembrados que no la tenían
+            Article::where('slug', $slug)->whereNull('image')->update(['image' => $imageValue]);
 
             Article::firstOrCreate(
                 ['slug' => $slug],
