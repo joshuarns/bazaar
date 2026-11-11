@@ -1,56 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import HeroSection from '../components/HeroSection';
 import ArticleSection from '../components/ArticleSection';
 import MagazinePush from '../components/MagazinePush';
+import Dossier from '../components/Dossier';
 import MostRead from '../components/MostRead';
-import Newsletter from '../components/Newsletter';
+import { AdSlot, KiosquePush, NewsletterPush } from '../components/AsidePushes';
 import api from '../services/api';
+
+// Lo que va en la columna derecha de cada sección de categoría, en orden.
+const SECTION_ASIDES = [<NewsletterPush />, <AdSlot />, <KiosquePush />, null];
 
 export default function Home() {
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api.get('/home').then(res => setData(res.data)).catch(() => setData({})).finally(() => setLoading(false));
+        api.get('/home').then(res => setData(res.data)).catch(() => setData({}));
     }, []);
 
-    if (loading) {
+    if (!data) {
         return (
-            <div className="max-w-screen-xl mx-auto px-4 py-10 space-y-10">
-                {/* Skeleton loader */}
-                <div className="animate-pulse">
-                    <div className="h-3 w-16 bg-[#e5e2de] mb-4" />
-                    <div className="aspect-[960/545] bg-[#e8e5e1] w-full" />
-                    <div className="mt-4 h-8 bg-[#e5e2de] w-2/3" />
-                    <div className="mt-2 h-4 bg-[#e5e2de] w-1/2" />
-                </div>
+            <div className="hb-home animate-pulse">
+                <div className="hb-img hb-ratio-16x9" />
             </div>
         );
     }
 
-    if (!data) return null;
-
-    // Separar secciones: las primeras 2 van antes del magazinePush, el resto después
-    const sections = data.sections || [];
-    const mostRead = data.most_read || [];
+    const une = data.featured ? [data.featured, ...(data.une || [])] : [];
 
     return (
-        <>
-            {data.featured && <HeroSection article={data.featured} />}
-
-            {sections.slice(0, 2).map((section, i) => (
-                <ArticleSection key={i} section={section} />
-            ))}
+        <div className="hb-home">
+            <ArticleSection articles={une} badge="Destacado" aside={<AdSlot />} />
 
             <MagazinePush meta={data.magazine} />
 
-            <MostRead articles={mostRead} />
+            <Dossier dossier={data.dossier} />
 
-            {sections.slice(2).map((section, i) => (
-                <ArticleSection key={i + 2} section={section} />
+            <MostRead articles={data.most_read} />
+
+            {(data.sections || []).map((section, i) => (
+                <ArticleSection
+                    key={section.slug}
+                    title={section.title}
+                    slug={section.slug}
+                    articles={section.articles}
+                    aside={SECTION_ASIDES[i % SECTION_ASIDES.length]}
+                />
             ))}
-
-            <Newsletter />
-        </>
+        </div>
     );
 }
