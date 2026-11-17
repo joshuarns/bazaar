@@ -66,6 +66,11 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "vercel": [
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --force --no-interaction",
+            "@php artisan db:seed --class=BazaarSeeder --force --no-interaction"
         ]
     },
     "extra": {

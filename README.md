@@ -1,58 +1,51 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bazaar
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Réplica del home de Harper's Bazaar FR hecha con Laravel 13 (API) y dos SPAs en React 19 (sitio público y panel admin), Tailwind 4 y Vite 8.
 
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Desarrollo local
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env && php artisan key:generate
+touch database/database.sqlite
+php artisan migrate --seed
+php artisan db:seed --class=BazaarSeeder
+npm install
+npm run dev          # en una terminal
+php artisan serve    # en otra
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Deploy en Vercel
 
-## Contributing
+Vercel no ejecuta PHP de forma nativa: se usa el runtime comunitario [`vercel-php`](https://github.com/vercel-community/php) (PHP 8.5).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Archivos implicados:
 
-## Code of Conduct
+- `vercel.json`: sirve `public/build`, `public/images`, `favicon.ico` y `robots.txt` como estáticos y manda todo lo demás a `api/index.php`. También define las variables de entorno no secretas (caché y vistas en `/tmp`, sesiones en cookie, logs a `stderr`).
+- `api/index.php`: punto de entrada de la función; carga `public/index.php`.
+- `composer.json` → script `vercel`: durante el build crea la base SQLite, ejecuta las migraciones y siembra `BazaarSeeder`.
+- `public/build`: los assets compilados **se versionan** porque Laravel necesita leer `public/build/manifest.json` dentro de la función.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Pasos
 
-## Security Vulnerabilities
+1. Compila los assets y súbelos junto con tus cambios (hazlo cada vez que cambies algo de `resources/js` o `resources/css`):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```bash
+   npm run build
+   git add public/build && git commit -m "Compilar assets" && git push
+   ```
 
-## License
+2. En Vercel → *Project Settings* → *Environment Variables*, añade `APP_KEY` con el valor que imprime:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```bash
+   php artisan key:generate --show
+   ```
+
+   Opcional: `APP_URL` con el dominio del proyecto (por ejemplo `https://bazaar.vercel.app`).
+
+3. Lanza un nuevo deploy (*Deployments* → *Redeploy*, o con un `git push`).
+
+### Limitaciones
+
+- El sistema de archivos de Vercel es de solo lectura: la base SQLite se regenera en cada deploy y **no admite escrituras**. El sitio público funciona, pero el panel admin no puede guardar artículos, banners ni categorías. Para eso hace falta una base externa (por ejemplo Postgres de Neon desde el Marketplace de Vercel) configurando `DB_CONNECTION`, `DB_URL`, etc.
+- Las imágenes subidas desde el admin tampoco persisten; habría que usar un disco externo (S3, R2…).

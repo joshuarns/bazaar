@@ -1,0 +1,21 @@
+# Vercel instala las dependencias de Composer durante el build
+/vendor
+/node_modules
+
+# Secretos y datos locales: nunca se suben
+.env
+.env.*
+!.env.example
+/database/*.sqlite*
+/storage/logs/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/cache/data/*
+
+# Enlaces y archivos solo de desarrollo
+/public/storage
+/public/hot
+/.claude
+/.idea
+/.vscode
+/tests
