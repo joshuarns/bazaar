@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./chrome.css";
+@import "./pages.css";
 
 :root {
     --bg: #f9f7f5;
@@ -21,10 +22,6 @@ body {
 }
 
 .font-serif { font-family: var(--serif-display); }
-
-.prose { font-family: var(--serif-text); line-height: 1.8; }
-.prose p { margin-bottom: 1.5em; }
-.prose h2 { font-family: var(--serif-display); font-size: 1.5rem; margin: 2em 0 .75em; }
 
 /* ───────────── Layout ───────────── */
 .hb-page { max-width: 1000px; margin: 0 auto; padding: 0 20px; }

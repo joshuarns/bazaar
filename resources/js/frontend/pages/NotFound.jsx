@@ -1,12 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useDocumentMeta from '../hooks/useDocumentMeta';
+import { SmallChevron } from '../components/Icons';
 
-export default function NotFound() {
+export default function NotFound({
+    title = 'Página no encontrada',
+    message = 'La página que buscas no existe o se ha movido.',
+}) {
+    useDocumentMeta(title, null);
+
     return (
-        <div className="h-96 flex flex-col items-center justify-center gap-4">
-            <p className="font-serif text-6xl text-[#1d1d1b]">404</p>
-            <p className="text-gray-500 text-sm">Página no encontrada</p>
-            <Link to="/" className="text-sm underline text-[#1d1d1b]">Volver al inicio</Link>
-        </div>
+        <section className="hb-notfound">
+            <div className="hb-notfound-code" aria-hidden="true">404</div>
+            <h1>{title}</h1>
+            <p>{message}</p>
+            <Link to="/" className="hb-cta">Volver a la portada <SmallChevron /></Link>
+        </section>
     );
 }

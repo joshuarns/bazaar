@@ -5,12 +5,14 @@ import Dossier from '../components/Dossier';
 import MostRead from '../components/MostRead';
 import { AdSlot, KiosquePush, NewsletterPush } from '../components/AsidePushes';
 import api from '../services/api';
+import useDocumentMeta from '../hooks/useDocumentMeta';
 
 // Lo que va en la columna derecha de cada sección de categoría, en orden.
 const SECTION_ASIDES = [<NewsletterPush />, <AdSlot />, <KiosquePush />, null];
 
 export default function Home() {
     const [data, setData] = useState(null);
+    useDocumentMeta(null, 'Moda, belleza, cultura y estilo de vida: las últimas tendencias en Bazaar.');
 
     useEffect(() => {
         api.get('/home').then(res => setData(res.data)).catch(() => setData({}));

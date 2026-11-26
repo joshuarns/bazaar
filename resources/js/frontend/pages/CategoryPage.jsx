@@ -1,35 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
+import ArticleSection from '../components/ArticleSection';
+import ArticleGrid, { Pagination } from '../components/ArticleGrid';
+import { AdSlot, KiosquePush, NewsletterPush } from '../components/AsidePushes';
+import useDocumentMeta from '../hooks/useDocumentMeta';
+import NotFound from './NotFound';
 
 export default function CategoryPage() {
     const { category } = useParams();
+    const [params] = useSearchParams();
+    const page = Math.max(1, parseInt(params.get('page') || '1', 10) || 1);
     const [data, setData] = useState(null);
+    const [status, setStatus] = useState('loading');
 
     useEffect(() => {
-        api.get(`/categories/${category}`).then(res => setData(res.data)).catch(() => {});
-    }, [category]);
+        setStatus('loading');
+        api.get(`/categories/${category}`, { params: { page } })
+            .then(res => { setData(res.data); setStatus('ok'); })
+            .catch(err => setStatus(err.response?.status === 404 ? 'notfound' : 'error'));
+    }, [category, page]);
 
-    if (!data) return <div className="h-96 flex items-center justify-center text-gray-400 text-sm">Cargando...</div>;
+    const name = status === 'ok' ? data.name : null;
+    useDocumentMeta(name && (page > 1 ? `${name} — página ${page}` : name), name && `Los últimos artículos de ${name} en Bazaar.`);
+
+    if (status === 'notfound') return <NotFound />;
+    if (status === 'error') return <NotFound title="No se pudo cargar la sección" message="Inténtalo de nuevo en unos minutos." />;
+    if (status === 'loading') {
+        return (
+            <div className="hb-category" aria-busy="true">
+                <div className="hb-skeleton" style={{ height: 67, width: 280 }} />
+                <div className="hb-img hb-ratio-16x9 hb-skeleton" />
+            </div>
+        );
+    }
+
+    const { articles, meta } = data;
+    if (meta.total > 0 && page > meta.last_page) return <NotFound />;
+    // En la primera página los 6 primeros forman el bloque destacado (como en el home)
+    const top = page === 1 ? articles.slice(0, 6) : [];
+    const rest = page === 1 ? articles.slice(6) : articles;
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-12">
-            <h1 className="font-serif text-4xl text-[#1d1d1b] mb-10 uppercase tracking-widest">{data.name}</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {data.articles?.map(article => (
-                    <Link key={article.id} to={`/${category}/${article.slug}`} className="group">
-                        {article.image_url && (
-                            <div className="aspect-[3/2] overflow-hidden mb-4">
-                                <img src={article.image_url} alt={article.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            </div>
-                        )}
-                        <p className="font-serif text-xl text-[#1d1d1b] leading-snug group-hover:underline">{article.title}</p>
-                        {article.excerpt && <p className="text-sm text-gray-500 mt-2 line-clamp-2">{article.excerpt}</p>}
-                    </Link>
-                ))}
-            </div>
+        <div className="hb-category">
+            <header className="hb-category-head">
+                <h1 className="hb-title hb-title--medium hb-title--underline">{data.name}</h1>
+                {meta.total > 0 && (
+                    <p className="hb-category-count">{meta.total} artículo{meta.total === 1 ? '' : 's'}{page > 1 ? ` · página ${page} de ${meta.last_page}` : ''}</p>
+                )}
+            </header>
+
+            {meta.total === 0 ? (
+                <p className="hb-category-empty">Todavía no hay artículos en esta sección. Vuelve pronto.</p>
+            ) : (
+                <>
+                    {top.length > 0 && <ArticleSection articles={top} aside={<NewsletterPush />} />}
+                    <ArticleGrid articles={rest} aside={top.length ? <KiosquePush /> : <AdSlot />} />
+                    <Pagination
+                        current={meta.current_page}
+                        last={meta.last_page}
+                        hrefFor={p => (p === 1 ? `/${category}` : `/${category}?page=${p}`)}
+                    />
+                </>
+            )}
         </div>
     );
 }
