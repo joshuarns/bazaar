@@ -5,6 +5,14 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Auth\SessionController;
+
+// --- Sesión del panel admin ---
+Route::post('/login', [SessionController::class, 'store'])->middleware('throttle:6,1');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [SessionController::class, 'show']);
+    Route::post('/logout', [SessionController::class, 'destroy']);
+});
 
 // --- Public API ---
 Route::get('/home', HomeController::class);

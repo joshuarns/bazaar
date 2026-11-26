@@ -1,0 +1,6 @@
+# Solo se usa si el dominio apunta a la raíz del proyecto en lugar de a public/.
+# Manda todas las peticiones a public/, así .env, vendor/ y el resto quedan fuera del alcance web.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

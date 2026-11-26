@@ -15,6 +15,50 @@ npm run dev          # en una terminal
 php artisan serve    # en otra
 ```
 
+## Panel admin
+
+El panel está en `/admin`. Para crear un usuario (o cambiarle la contraseña):
+
+```bash
+php artisan bazaar:admin
+```
+
+## Deploy en cPanel
+
+Requisitos del hosting: **PHP 8.4 o superior** (*Select PHP Version* / *MultiPHP Manager*) con `pdo_mysql`, `mbstring`, `fileinfo` e `intl`, y una base de datos MySQL. Lo más cómodo es tener acceso por **SSH** (*Terminal* en cPanel).
+
+1. **Base de datos:** en *Bases de datos MySQL* crea la base, el usuario y dale todos los privilegios sobre ella.
+2. **Código:** sube el proyecto a una carpeta fuera de `public_html`, por ejemplo `~/bazaar`, con *Git Version Control* (clonando el repo) o subiendo un zip.
+3. **Dominio → carpeta pública:** en *Dominios*, apunta la raíz del documento del dominio a `~/bazaar/public`.
+   Si tu plan no permite cambiarla, sube el proyecto directamente a `public_html`: el `.htaccess` de la raíz redirige todo a `public/` y deja fuera `.env`, `vendor`, etc.
+4. **Instalación** (desde la Terminal de cPanel, dentro de la carpeta del proyecto):
+
+   ```bash
+   composer install --no-dev --optimize-autoloader
+   cp .env.production.example .env      # y edita .env: APP_URL y datos de MySQL
+   php artisan key:generate
+   php artisan migrate --force
+   php artisan db:seed --class=BazaarSeeder --force   # opcional: artículos de ejemplo
+   php artisan storage:link
+   php artisan bazaar:admin
+   php artisan config:cache && php artisan route:cache && php artisan view:cache
+   ```
+
+   Los assets (`public/build`) ya vienen compilados en el repo, así que el servidor no necesita Node.
+5. **Actualizar** después de un `git pull`:
+
+   ```bash
+   composer install --no-dev --optimize-autoloader
+   php artisan migrate --force
+   php artisan config:cache && php artisan route:cache && php artisan view:cache
+   ```
+
+Notas:
+
+- Si `composer` no existe en tu hosting, ejecuta `composer install --no-dev` en tu equipo y sube también la carpeta `vendor/`.
+- Si `storage:link` falla porque el hosting no permite enlaces simbólicos, las imágenes subidas desde el admin no se verán; pide al soporte que habilite la función `symlink` de PHP o que cree el enlace `public/storage → storage/app/public`.
+- Si el sitio responde con y sin `www`, añade ambos en `SANCTUM_STATEFUL_DOMAINS` o el login del admin fallará en uno de ellos.
+
 ## Deploy en Vercel
 
 Vercel no ejecuta PHP de forma nativa: se usa el runtime comunitario [`vercel-php`](https://github.com/vercel-community/php) (PHP 8.5).

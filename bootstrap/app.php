@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Detrás del proxy de Vercel: respeta X-Forwarded-Proto para generar URLs https
         $middleware->trustProxies(at: '*');
+
+        // El panel admin (SPA en el mismo dominio) se autentica con la cookie de sesión
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

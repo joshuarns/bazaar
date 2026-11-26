@@ -4,10 +4,10 @@ import { LayoutDashboard, FileText, Image, Tag, LogOut, Menu, X } from 'lucide-r
 import { useAuth } from '../context/AuthContext';
 
 const navItems = [
-    { to: '/admin/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-    { to: '/admin/articles', label: 'Artículos', icon: FileText },
-    { to: '/admin/banners', label: 'Banners', icon: Image },
-    { to: '/admin/categories', label: 'Categorías', icon: Tag },
+    { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+    { to: '/articles', label: 'Artículos', icon: FileText },
+    { to: '/banners', label: 'Banners', icon: Image },
+    { to: '/categories', label: 'Categorías', icon: Tag },
 ];
 
 export default function AdminLayout() {
@@ -17,8 +17,7 @@ export default function AdminLayout() {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/admin/login', { replace: true });
-        window.location.href = '/admin/login';
+        navigate('/login', { replace: true });
     };
 
     return (

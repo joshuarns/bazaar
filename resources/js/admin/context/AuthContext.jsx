@@ -15,9 +15,9 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = async (email, password) => {
-        await api.get('/sanctum/csrf-cookie');
-        await api.post('/login', { email, password });
-        const res = await api.get('/user');
+        // La ruta de Sanctum vive fuera de /api
+        await api.get('/sanctum/csrf-cookie', { baseURL: '/' });
+        const res = await api.post('/login', { email, password });
         setUser(res.data);
     };
 

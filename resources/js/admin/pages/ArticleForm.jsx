@@ -47,7 +47,7 @@ export default function ArticleForm() {
             await api.post(isEditing ? `/admin/articles/${id}` : '/admin/articles', data, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            navigate('/admin/articles', { replace: true });
+            navigate('/articles', { replace: true });
         } catch (err) {
             setError(err.response?.data?.message || 'Error al guardar');
         } finally {
@@ -58,7 +58,7 @@ export default function ArticleForm() {
     return (
         <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
-                <button onClick={() => navigate('/admin/articles', { replace: true })} className="p-2 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100">
+                <button onClick={() => navigate('/articles', { replace: true })} className="p-2 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100">
                     <ArrowLeft size={18} />
                 </button>
                 <h2 className="text-xl font-semibold text-gray-800">{isEditing ? 'Editar artículo' : 'Nuevo artículo'}</h2>
@@ -118,7 +118,7 @@ export default function ArticleForm() {
                         className="bg-[#1d1d1b] text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-[#333] transition-colors disabled:opacity-50">
                         {loading ? 'Guardando...' : 'Guardar'}
                     </button>
-                    <button type="button" onClick={() => navigate('/admin/articles', { replace: true })}
+                    <button type="button" onClick={() => navigate('/articles', { replace: true })}
                         className="px-6 py-2.5 rounded-lg text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
                         Cancelar
                     </button>
