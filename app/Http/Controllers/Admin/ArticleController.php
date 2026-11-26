@@ -39,11 +39,14 @@ class ArticleController extends Controller
     {
         $data = $this->validated($request, $article);
 
-        if ($request->hasFile('image')) {
+        // Nueva imagen o "quitar imagen": la anterior se borra del disco
+        if ($request->hasFile('image') || $request->boolean('remove_image')) {
             if ($article->image && !str_starts_with($article->image, 'http')) {
                 Storage::disk('public')->delete($article->image);
             }
-            $data['image'] = $request->file('image')->store('articles', 'public');
+            $data['image'] = $request->hasFile('image')
+                ? $request->file('image')->store('articles', 'public')
+                : null;
         }
 
         $article->update($this->prepare($data, $article));
@@ -83,6 +86,7 @@ class ArticleController extends Controller
             'meta_description' => 'nullable|string|max:320',
             'tags'             => 'nullable|string|max:500',
             'image'            => 'nullable|image|max:5120',
+            'remove_image'     => 'nullable|boolean',
         ]);
     }
 
@@ -93,7 +97,7 @@ class ArticleController extends Controller
      */
     private function prepare(array $data, ?Article $article = null): array
     {
-        unset($data['tags']);
+        unset($data['tags'], $data['remove_image']);
 
         if (array_key_exists('content', $data)) {
             $data['content'] = ArticleHtml::clean($data['content']);

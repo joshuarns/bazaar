@@ -28,8 +28,8 @@ export default function App() {
             >
                 <Route index element={<Dashboard />} />
                 <Route path="articles" element={<Articles />} />
-                <Route path="articles/new" element={<ArticleForm />} />
-                <Route path="articles/:id/edit" element={<ArticleForm />} />
+                <Route path="articles/new" element={<ArticleForm key="new" />} />
+                <Route path="articles/:id/edit" element={<ArticleForm key="edit" />} />
                 <Route path="banners" element={<Banners />} />
                 <Route path="categories" element={<Categories />} />
             </Route>

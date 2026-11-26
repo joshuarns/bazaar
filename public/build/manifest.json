@@ -4,7 +4,7 @@
     "name": "axios"
   },
   "resources/js/admin/main.jsx": {
-    "file": "assets/main-Cz0PjvL3.js",
+    "file": "assets/main-kHYSLjk_.js",
     "name": "main",
     "src": "resources/js/admin/main.jsx",
     "isEntry": true,
@@ -12,11 +12,11 @@
       "_axios-r8UuSPUM.js"
     ],
     "css": [
-      "assets/main-C4XDxKGC.css"
+      "assets/main-Bk-npmIH.css"
     ]
   },
   "resources/js/frontend/main.jsx": {
-    "file": "assets/main-DkqUwKxf.js",
+    "file": "assets/main-CtHrqSaG.js",
     "name": "main",
     "src": "resources/js/frontend/main.jsx",
     "isEntry": true,
@@ -24,7 +24,7 @@
       "_axios-r8UuSPUM.js"
     ],
     "css": [
-      "assets/main-DazoUR_M.css"
+      "assets/main-DcPF_gRT.css"
     ]
   }
 }
