@@ -6,6 +6,7 @@ import RichTextEditor from '../components/RichTextEditor';
 import TagInput from '../components/TagInput';
 import ImageDrop from '../components/ImageDrop';
 import SearchPreview from '../components/SearchPreview';
+import { useUI } from '../components/ui';
 
 const EMPTY = {
     title: '', slug: '', category_id: '', author: '', excerpt: '', content: '',
@@ -102,6 +103,7 @@ export default function ArticleForm() {
     const [toast, setToast] = useState('');
     const [seoOpen, setSeoOpen] = useState(false);
     const topRef = useRef(null);
+    const { toast: notify, confirm } = useUI();
 
     // ── Carga ──
     useEffect(() => {
@@ -151,10 +153,11 @@ export default function ArticleForm() {
         return () => window.removeEventListener('beforeunload', warn);
     }, [dirty]);
 
+    // Los avisos se muestran con el sistema común del panel
     useEffect(() => {
         if (!toast) return;
-        const t = setTimeout(() => setToast(''), 3000);
-        return () => clearTimeout(t);
+        notify(toast);
+        setToast('');
     }, [toast]);
 
     const set = (name, value) => setForm(prev => ({
@@ -252,8 +255,15 @@ export default function ArticleForm() {
         return () => window.removeEventListener('keydown', onKey);
     }, [save]);
 
-    const goBack = () => {
-        if (dirty && !window.confirm('Tienes cambios sin guardar. ¿Salir sin guardar?')) return;
+    const goBack = async () => {
+        if (dirty) {
+            const leave = await confirm({
+                title: '¿Salir sin guardar?',
+                message: 'Tienes cambios que todavía no has guardado y se perderán.',
+                confirmLabel: 'Salir sin guardar', cancelLabel: 'Seguir editando', danger: true,
+            });
+            if (!leave) return;
+        }
         navigate('/articles');
     };
 
@@ -274,7 +284,7 @@ export default function ArticleForm() {
             <div ref={topRef} />
 
             {/* Barra de acciones fija */}
-            <div className="sticky top-0 z-30 -mx-6 -mt-6 mb-6 px-6 py-3 bg-gray-100/95 backdrop-blur border-b border-gray-200 flex flex-wrap items-center gap-3">
+            <div className="sticky top-0 z-30 -mx-6 -mt-6 mb-6 px-6 py-3 bg-gray-50/95 backdrop-blur border-b border-gray-200 flex flex-wrap items-center gap-3">
                 <button type="button" onClick={goBack} aria-label="Volver a la lista" className="p-2 text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-200">
                     <ArrowLeft size={18} />
                 </button>
@@ -493,11 +503,6 @@ export default function ArticleForm() {
                 </aside>
             </div>
 
-            {toast && (
-                <div role="status" className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 bg-[#1d1d1b] text-white text-sm px-4 py-3 rounded-lg shadow-lg">
-                    <Check size={16} /> {toast}
-                </div>
-            )}
         </form>
     );
 }

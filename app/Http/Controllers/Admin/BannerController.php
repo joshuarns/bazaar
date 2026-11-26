@@ -31,7 +31,21 @@ class BannerController extends Controller
         return response()->json(Banner::create($data), 201);
     }
 
-    public function destroy(Banner $banner)
+    public function update(Request $request, Banner $banner)
+    {
+        $data = $request->validate([
+            'title'    => 'nullable|string|max:255',
+            'link'     => 'nullable|url',
+            'position' => 'sometimes|required|in:hero,sidebar,inline',
+            'active'   => 'sometimes|boolean',
+        ]);
+
+        $banner->update($data);
+
+        return response()->json($banner);
+    }
+
+        public function destroy(Banner $banner)
     {
         if ($banner->image) Storage::disk('public')->delete($banner->image);
         $banner->delete();

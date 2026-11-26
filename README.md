@@ -17,10 +17,16 @@ php artisan serve    # en otra
 
 ## Panel admin
 
-El panel está en `/admin`. Para crear un usuario (o cambiarle la contraseña):
+El panel está en `/admin`. Hay dos roles:
+
+- **Administrador:** todo, incluidos usuarios, categorías y banners.
+- **Editor:** escribe, edita, publica y borra artículos.
+
+Los usuarios se gestionan desde *Usuarios* en el panel. Para crear el primer administrador (o recuperar el acceso) desde la terminal:
 
 ```bash
-php artisan bazaar:admin
+php artisan bazaar:admin                 # administrador
+php artisan bazaar:admin --role=editor   # editor
 ```
 
 ## Deploy en cPanel

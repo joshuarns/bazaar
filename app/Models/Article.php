@@ -20,7 +20,7 @@ class Article extends Model
         'published_at' => 'datetime',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'status'];
 
     public function getImageUrlAttribute(): ?string
     {
@@ -37,6 +37,25 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    /**
+     * Estado editorial: draft (borrador), scheduled (programado) o published (publicado y visible).
+     */
+    public function scopeStatus(Builder $query, string $status): Builder
+    {
+        return match ($status) {
+            'draft' => $query->where('published', false),
+            'scheduled' => $query->where('published', true)->where('published_at', '>', now()),
+            'published' => $query->visible(),
+            default => $query,
+        };
+    }
+
+    public function getStatusAttribute(): string
+    {
+        if (!$this->published) return 'draft';
+        return $this->published_at && $this->published_at->isFuture() ? 'scheduled' : 'published';
     }
 
     /**

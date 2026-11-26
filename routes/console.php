@@ -13,11 +13,11 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 /*
- * Crea (o actualiza la contraseña de) un usuario del panel admin.
+ * Crea (o actualiza la contraseña y el rol de) un usuario del panel admin. Por defecto, administrador.
  * Interactivo:      php artisan bazaar:admin
  * Sin preguntas:    php artisan bazaar:admin --email=tu@correo.com --name="Tu nombre" --password=...
  */
-Artisan::command('bazaar:admin {--email=} {--name=} {--password=}', function () {
+Artisan::command('bazaar:admin {--email=} {--name=} {--password=} {--role=admin : admin o editor}', function () {
     $email = $this->option('email') ?: text('Email', required: true, validate: ['email' => 'email']);
     $existing = User::where('email', $email)->first();
 
@@ -25,6 +25,13 @@ Artisan::command('bazaar:admin {--email=} {--name=} {--password=}', function () 
         ?: ($existing?->name ?? text('Nombre', default: 'Administrador', required: true));
 
     $plain = $this->option('password') ?: password('Contraseña (mínimo 8 caracteres)', required: true);
+
+    $role = $this->option('role');
+    if (! in_array($role, User::ROLES, true)) {
+        $this->error('El rol debe ser "admin" o "editor".');
+
+        return 1;
+    }
 
     $validator = Validator::make(
         ['email' => $email, 'password' => $plain],
@@ -36,11 +43,11 @@ Artisan::command('bazaar:admin {--email=} {--name=} {--password=}', function () 
         return 1;
     }
 
-    User::updateOrCreate(['email' => $email], ['name' => $name, 'password' => $plain]);
+    User::updateOrCreate(['email' => $email], ['name' => $name, 'password' => $plain, 'role' => $role]);
 
     $this->info($existing
         ? "Contraseña actualizada para {$email}."
-        : "Administrador {$email} creado. Ya puedes entrar en /admin.");
+        : ($role === User::ROLE_ADMIN ? 'Administrador' : 'Editor')." {$email} creado. Ya puedes entrar en /admin.");
 
     return 0;
-})->purpose('Crea o actualiza un usuario del panel admin');
+})->purpose('Crea o actualiza un usuario del panel admin (--role=admin|editor)');

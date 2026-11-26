@@ -4,19 +4,32 @@
     "name": "axios"
   },
   "resources/js/admin/main.jsx": {
-    "file": "assets/main-kHYSLjk_.js",
+    "file": "assets/main-DuFkFfyI.js",
     "name": "main",
     "src": "resources/js/admin/main.jsx",
     "isEntry": true,
     "imports": [
       "_axios-r8UuSPUM.js"
     ],
+    "dynamicImports": [
+      "resources/js/admin/pages/ArticleForm.jsx"
+    ],
     "css": [
-      "assets/main-Bk-npmIH.css"
+      "assets/main-DeAwPyDL.css"
+    ]
+  },
+  "resources/js/admin/pages/ArticleForm.jsx": {
+    "file": "assets/ArticleForm-pVRK3S-p.js",
+    "name": "ArticleForm",
+    "src": "resources/js/admin/pages/ArticleForm.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_axios-r8UuSPUM.js",
+      "resources/js/admin/main.jsx"
     ]
   },
   "resources/js/frontend/main.jsx": {
-    "file": "assets/main-CtHrqSaG.js",
+    "file": "assets/main-B-TcFxyj.js",
     "name": "main",
     "src": "resources/js/frontend/main.jsx",
     "isEntry": true,
@@ -24,7 +37,7 @@
       "_axios-r8UuSPUM.js"
     ],
     "css": [
-      "assets/main-DcPF_gRT.css"
+      "assets/main-npPHeCcZ.css"
     ]
   }
 }

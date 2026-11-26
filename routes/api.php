@@ -21,10 +21,19 @@ Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 
 // --- Admin API (requires auth) ---
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    // Administradores y editores
     Route::get('/stats', Admin\StatsController::class);
+    Route::post('/articles/bulk', [Admin\ArticleController::class, 'bulk']);
     Route::apiResource('/articles', Admin\ArticleController::class);
-    Route::apiResource('/banners', Admin\BannerController::class)->only(['index', 'store', 'destroy']);
-    Route::apiResource('/categories', Admin\CategoryController::class)->only(['index', 'store', 'destroy']);
+    Route::get('/categories', [Admin\CategoryController::class, 'index']);
     Route::get('/tags', fn () => \App\Models\Tag::orderBy('name')->pluck('name'));
     Route::post('/uploads', [Admin\UploadController::class, 'store']);
+    Route::put('/profile', [Admin\ProfileController::class, 'update']);
+
+    // Solo administradores
+    Route::middleware('can:admin')->group(function () {
+        Route::apiResource('/users', Admin\UserController::class);
+        Route::apiResource('/banners', Admin\BannerController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::apiResource('/categories', Admin\CategoryController::class)->only(['store', 'update', 'destroy']);
+    });
 });

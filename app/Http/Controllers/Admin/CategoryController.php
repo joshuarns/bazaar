@@ -10,17 +10,29 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return Category::withCount('articles')->get();
+        return Category::withCount('articles')->orderBy('name')->get();
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:100',
-            'slug' => 'required|string|unique:categories,slug',
+            'slug' => 'required|string|max:100|alpha_dash|unique:categories,slug',
         ]);
 
         return response()->json(Category::create($data), 201);
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:100',
+            'slug' => 'required|string|max:100|alpha_dash|unique:categories,slug,'.$category->id,
+        ]);
+
+        $category->update($data);
+
+        return response()->json($category->loadCount('articles'));
     }
 
     public function destroy(Category $category)
