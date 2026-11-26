@@ -3,6 +3,26 @@ import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import api from '../services/api';
 
+const formatDate = (iso) => new Date(iso).toLocaleString('es', { dateStyle: 'medium', timeStyle: 'short' });
+
+function StatusBadge({ article }) {
+    const scheduled = article.published && article.published_at && new Date(article.published_at) > new Date();
+    const [label, cls] = !article.published
+        ? ['Borrador', 'bg-gray-100 text-gray-500']
+        : scheduled
+            ? ['Programado', 'bg-amber-50 text-amber-700']
+            : ['Publicado', 'bg-green-50 text-green-700'];
+
+    return (
+        <div>
+            <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${cls}`}>{label}</span>
+            {article.published && article.published_at && (
+                <div className="mt-1 text-xs text-gray-400">{formatDate(article.published_at)}</div>
+            )}
+        </div>
+    );
+}
+
 export default function Articles() {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -52,9 +72,7 @@ export default function Articles() {
                                     <td className="px-6 py-4 font-medium text-gray-800">{article.title}</td>
                                     <td className="px-6 py-4 text-gray-500">{article.category?.name || '—'}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${article.published ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                                            {article.published ? 'Publicado' : 'Borrador'}
-                                        </span>
+                                        <StatusBadge article={article} />
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2">

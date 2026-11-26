@@ -19,8 +19,12 @@ export default function Categories() {
 
     const handleDelete = async (id) => {
         if (!confirm('¿Eliminar esta categoría?')) return;
-        await api.delete(`/admin/categories/${id}`);
-        fetch();
+        try {
+            await api.delete(`/admin/categories/${id}`);
+            fetch();
+        } catch (err) {
+            alert(err.response?.data?.message || 'No se pudo eliminar la categoría');
+        }
     };
 
     return (
@@ -55,7 +59,7 @@ export default function Categories() {
                             <div key={cat.id} className="flex items-center justify-between px-6 py-4">
                                 <div>
                                     <p className="font-medium text-gray-800 text-sm">{cat.name}</p>
-                                    <p className="text-xs text-gray-400">/{cat.slug}</p>
+                                    <p className="text-xs text-gray-400">/{cat.slug} · {cat.articles_count} artículo{cat.articles_count === 1 ? '' : 's'}</p>
                                 </div>
                                 <button onClick={() => handleDelete(cat.id)} className="p-1.5 text-gray-400 hover:text-red-500">
                                     <Trash2 size={15} />

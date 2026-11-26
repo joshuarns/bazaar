@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function __invoke()
     {
         $published = fn () => Article::with('category')
-            ->where('published', true)
+            ->visible()
             ->latest('published_at');
 
         $featured = $published()->where('featured', true)->first() ?? $published()->first();

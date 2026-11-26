@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::apiResource('/articles', Admin\ArticleController::class);
     Route::apiResource('/banners', Admin\BannerController::class)->only(['index', 'store', 'destroy']);
     Route::apiResource('/categories', Admin\CategoryController::class)->only(['index', 'store', 'destroy']);
+    Route::get('/tags', fn () => \App\Models\Tag::orderBy('name')->pluck('name'));
+    Route::post('/uploads', [Admin\UploadController::class, 'store']);
 });

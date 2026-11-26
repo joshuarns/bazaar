@@ -11,7 +11,7 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         $articles = $category->articles()
-            ->where('published', true)
+            ->visible()
             ->latest('published_at')
             ->get();
 

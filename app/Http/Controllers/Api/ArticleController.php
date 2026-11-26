@@ -10,10 +10,10 @@ class ArticleController extends Controller
 {
     public function show(string $categorySlug, string $articleSlug)
     {
-        $article = Article::with('category')
+        $article = Article::with(['category', 'tags'])
             ->whereHas('category', fn ($q) => $q->where('slug', $categorySlug))
             ->where('slug', $articleSlug)
-            ->where('published', true)
+            ->visible()
             ->firstOrFail();
 
         return response()->json($article);

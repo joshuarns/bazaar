@@ -25,6 +25,13 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $count = $category->articles()->count();
+        if ($count > 0) {
+            return response()->json([
+                'message' => "No se puede borrar «{$category->name}»: tiene {$count} artículo(s). Muévelos a otra categoría primero.",
+            ], 422);
+        }
+
         $category->delete();
         return response()->json(null, 204);
     }
