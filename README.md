@@ -1,6 +1,6 @@
 # Bazaar
 
-Réplica del home de Harper's Bazaar FR hecha con Laravel 13 (API) y dos SPAs en React 19 (sitio público y panel admin), Tailwind 4 y Vite 8.
+Revista digital de moda, belleza y cultura hecha con Laravel 13 (API) y dos SPAs en React 19 (sitio público y panel admin), Tailwind 4 y Vite 8.
 
 ## Desarrollo local
 

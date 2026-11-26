@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SITE_NAME } from '../site';
 import { useParams, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import ArticleSection from '../components/ArticleSection';
@@ -22,7 +23,7 @@ export default function CategoryPage() {
     }, [category, page]);
 
     const name = status === 'ok' ? data.name : null;
-    useDocumentMeta(name && (page > 1 ? `${name} — página ${page}` : name), name && `Los últimos artículos de ${name} en Bazaar.`);
+    useDocumentMeta(name && (page > 1 ? `${name} — página ${page}` : name), name && `Los últimos artículos de ${name} en ${SITE_NAME}.`);
 
     if (status === 'notfound') return <NotFound />;
     if (status === 'error') return <NotFound title="No se pudo cargar la sección" message="Inténtalo de nuevo en unos minutos." />;

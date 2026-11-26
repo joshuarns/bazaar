@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SITE_NAME } from '../site';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import { ArticleImage, VerticalCard } from '../components/ArticleCard';
@@ -82,8 +83,8 @@ export default function ArticlePage() {
 
                 <a href="#" className="hb-article-push">
                     <div className="hb-article-push-text">
-                        <div className="hb-push-title">La Newsletter Bazaar</div>
-                        <div>Moda audaz, belleza visionaria, cultura iconoclasta: ¡cada semana en tu newsletter Bazaar!</div>
+                        <div className="hb-push-title">La Newsletter {SITE_NAME}</div>
+                        <div>Moda audaz, belleza visionaria, cultura iconoclasta: ¡cada semana en tu newsletter {SITE_NAME}!</div>
                     </div>
                     <span className="hb-cta">Me inscribo <SmallChevron /></span>
                 </a>

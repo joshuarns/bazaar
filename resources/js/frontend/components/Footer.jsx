@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SocialLinks } from './Icons';
+import Logo from './Logo';
+import { SITE_NAME } from '../site';
 
 const LINKS = [
     'Aviso legal',
@@ -18,7 +20,7 @@ export default function Footer() {
             <div className="hb-footer-content">
                 <div className="hb-footer-brand">
                     <Link to="/" title="Ir al inicio">
-                        <img src="/images/logo-white.png" alt="Bazaar" className="hb-footer-logo" />
+                        <Logo className="hb-footer-logo" />
                     </Link>
                 </div>
 
@@ -31,14 +33,14 @@ export default function Footer() {
                 </nav>
 
                 <div className="hb-footer-socials">
-                    <h2 className="hb-footer-socials-title">Seguir a Bazaar</h2>
+                    <h2 className="hb-footer-socials-title">Seguir a {SITE_NAME}</h2>
                     <div className="hb-footer-socials-links"><SocialLinks /></div>
                 </div>
 
                 <div className="hb-footer-separator" />
 
                 <div className="hb-footer-legals">
-                    © {new Date().getFullYear()} Bazaar, todos los derechos reservados. <a href="#" className="hb-link">Aviso legal</a>
+                    © {new Date().getFullYear()} {SITE_NAME}, todos los derechos reservados. <a href="#" className="hb-link">Aviso legal</a>
                 </div>
 
                 <div className="hb-footer-mention">

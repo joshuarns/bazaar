@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import MagazineCover from './MagazineCover';
+import Logo from './Logo';
+import { SITE_NAME } from '../site';
 import { MenuButton, SearchIcon, SmallChevron, SocialLinks, UserIcon } from './Icons';
 
 const NAV_ITEMS = [
@@ -73,7 +75,7 @@ function NavigationPanel({ open, top, onClose }) {
                 <hr className="hb-panel-divider" />
 
                 <div className="hb-panel-social">
-                    <div className="hb-panel-social-title">Seguir a Bazaar</div>
+                    <div className="hb-panel-social-title">Seguir a {SITE_NAME}</div>
                     <div className="hb-panel-social-links"><SocialLinks /></div>
                 </div>
             </div>
@@ -145,7 +147,7 @@ export default function Header() {
                 </div>
 
                 <Link to="/" className="hb-logo" title="Ir al inicio" onClick={closeMenu}>
-                    <img src="/images/logo-dark.png" alt="Bazaar" />
+                    <Logo />
                 </Link>
 
                 <div className="hb-topbar-links">

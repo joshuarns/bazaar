@@ -30,13 +30,13 @@ class BazaarSeeder extends Seeder
                 'title'    => 'Dibujos animados, familias en la mesa… ¿Cómo las marcas ponen en escena las fiestas este año?',
                 'excerpt'  => 'Las marcas despliegan sus pequeños teatros de temporada, entre brillos, fantasía y suave desmesura.',
                 'featured' => true,
-                'image'    => 'https://www.harpersbazaar.fr/imgre/fit/~1~hbz~2026~11~09~c4647bff-bb6c-4c85-9c5c-20eebf291b11.jpg/960x545/quality/63/image.avif',
+                'image'    => null,
             ],
             [
                 'category' => 'mode',
                 'title'    => '535 días en Balenciaga: Pierpaolo Piccioli abre su cámara roll',
                 'excerpt'  => 'El director artístico revela los bastidores de Balenciaga a través de sus imágenes más íntimas.',
-                'image'    => 'https://www.harpersbazaar.fr/imgre/fit/~1~hbz~2026~11~06~1a2805b8-a8d8-4088-8d81-50bb473e6cb2.jpg/425x283/quality/63/image.avif',
+                'image'    => null,
             ],
             [
                 'category' => 'mode',
@@ -92,7 +92,7 @@ class BazaarSeeder extends Seeder
                 'category' => 'culture',
                 'title'    => 'Hola… Loïc Prigent',
                 'excerpt'  => 'Conversación con el "agitador estrella" de la moda, con motivo del lanzamiento del segundo volumen de su verdadera historia del estilo.',
-                'image'    => 'https://www.harpersbazaar.fr/imgre/fit/~1~hbz~2026~11~02~cbe61805-6ec4-4c6a-8558-82e3777fdabf.jpg/960x545/quality/63/image.avif',
+                'image'    => null,
             ],
             [
                 'category' => 'culture',

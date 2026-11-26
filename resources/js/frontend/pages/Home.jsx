@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SITE_NAME } from '../site';
 import ArticleSection from '../components/ArticleSection';
 import MagazinePush from '../components/MagazinePush';
 import Dossier from '../components/Dossier';
@@ -12,7 +13,7 @@ const SECTION_ASIDES = [<NewsletterPush />, <AdSlot />, <KiosquePush />, null];
 
 export default function Home() {
     const [data, setData] = useState(null);
-    useDocumentMeta(null, 'Moda, belleza, cultura y estilo de vida: las últimas tendencias en Bazaar.');
+    useDocumentMeta(null, `Moda, belleza, cultura y estilo de vida: las últimas tendencias en ${SITE_NAME}.`);
 
     useEffect(() => {
         api.get('/home').then(res => setData(res.data)).catch(() => setData({}));

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-
-const SITE = 'Bazaar';
+import { SITE_NAME as SITE } from '../site';
 
 /** Título de la pestaña y meta description de la página actual. */
 export default function useDocumentMeta(title, description) {

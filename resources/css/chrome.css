@@ -36,8 +36,8 @@
 
 /* Logo 285×72 → 135×34 */
 .hb-logo { grid-column: 2; display: flex; justify-content: center; }
-.hb-logo img { width: 285px; height: 72px; transition: width .3s, height .3s; }
-.is-sticky .hb-logo img { width: 135px; height: 34px; }
+.hb-logo svg { width: 285px; height: 72px; color: var(--fg); transition: width .3s, height .3s; }
+.is-sticky .hb-logo svg { width: 135px; height: 34px; }
 
 /* Iniciar sesión · Suscribirse · Newsletters */
 .hb-topbar-links { grid-column: 3; display: grid; justify-items: end; gap: 24px; font-size: 16px; }
@@ -158,7 +158,7 @@
         "mention mention mention";
 }
 .hb-footer-brand { grid-area: brand; }
-.hb-footer-logo { width: 230px; height: 58px; }
+.hb-footer-logo { display: block; width: 230px; height: 58px; color: #fff; }
 .hb-footer-links { grid-area: links; column-count: 2; column-gap: 20px; }
 .hb-footer-links ul { list-style: none; margin: 0; padding: 0; }
 .hb-footer-links li { display: block; margin-bottom: 20px; break-inside: avoid; }
@@ -181,7 +181,7 @@
     .hb-topbar .hb-topbar-menu { position: relative; left: auto; top: auto; margin: 0; opacity: 1; visibility: visible; }
     .hb-topbar-card { display: none; }
     .hb-logo { padding-left: 20px; margin-right: auto; }
-    .hb-logo img, .is-sticky .hb-logo img { width: 135px; height: 34px; }
+    .hb-logo svg, .is-sticky .hb-logo svg { width: 135px; height: 34px; }
     .hb-topbar-primary { gap: 16px; }
     .hb-login-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .hb-topbar .hb-cta--subscribe { height: 32px; padding: 0 16px; font-size: 14px; }

@@ -100,7 +100,7 @@ body {
 /* Magazine cover (portada generada: foto + logo) */
 .hb-cover { position: relative; aspect-ratio: 7 / 9; overflow: hidden; background: #c8b9a7; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
 .hb-cover > img:first-child { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hb-cover-logo { position: absolute; top: 4%; left: 6%; width: 88%; }
+.hb-cover-logo { position: absolute; top: 4%; left: 6%; width: 88%; height: auto; color: #fff; }
 
 /* ───────────── Magazine push ───────────── */
 .hb-magazine { border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); padding: 40px 16px; display: grid; justify-content: center; }
